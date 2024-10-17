@@ -18,21 +18,21 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
 
-      - name: Setup Java Sdk ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v1
-        with: |+
+      - name: Setup Java SDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v2
+        with:
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: 'Restore Project Dependencies Using Mvn'
+      - name: 'Restore Project Dependencies Using Maven'
         shell: pwsh
-        run: |+
-          pushd './${{ env.PACKAGE_DIRECTORY }}'
+        run: |
+          pushd ${{ env.PACKAGE_DIRECTORY }}
           mvn clean package
           popd
       
@@ -47,8 +47,7 @@ jobs:
         uses: Azure/functions-action@v1
         id: fa
         with:
-          app-name: 'azgitlocal'
+          app-name: '${{ env.AZURE_FUNCTIONAPP_NAME }}'
           slot-name: 'Production'
           package: '${{ env.PACKAGE_DIRECTORY }}'
           respect-pom-xml: true
-          
