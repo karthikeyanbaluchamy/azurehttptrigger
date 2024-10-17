@@ -28,6 +28,9 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin' # Specify the JDK distribution to use (e.g., temurin, zulu, adopt)
+          java-package: jdk
+          architecture: x64
 
       - name: 'Restore Project Dependencies Using Maven'
         shell: pwsh
